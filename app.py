@@ -100,5 +100,23 @@ def reset(alumno):
     return jsonify({"mensaje": f"Datos del alumno '{alumno}' reiniciados"})
 
 
+# 💬 Mensaje de bienvenida
+@app.route('/<string:alumno>', methods=['GET'])
+def home_alumno(alumno):
+    return jsonify({
+        "mensaje": f"Bienvenido {alumno}, usa /{alumno}/pokemons para interactuar.",
+        "endpoints": {
+            "GET": f"/{alumno}/pokemons",
+            "POST": f"/{alumno}/pokemons",
+            "GET uno": f"/{alumno}/pokemons/<nombre>",
+            "PUT": f"/{alumno}/pokemons/<nombre>",
+            "DELETE": f"/{alumno}/pokemons/<nombre>"
+        }
+    })
+
+
+# 🚀 Ejecutar app (Cloud Run compatible)
+import os
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host='0.0.0.0', port=port)
