@@ -8,6 +8,19 @@ CORS(app)
 # 🔹 Estructura principal: cada alumno tiene su propia "base"
 datos_alumnos = {}
 
+@app.route('/', methods=['GET'])
+def home():
+    return jsonify({
+        "mensaje": "👋 Bienvenido a la API Pokémon de JM Constructora (modo educativo).",
+        "descripcion": "Cada alumno puede usar su propio espacio de datos usando /<nombre>/pokemons",
+        "ejemplos": {
+            "alumno base": "/sebastian",
+            "listar pokemons": "/sebastian/pokemons",
+            "crear pokemon": "/sebastian/pokemons (POST)"
+        },
+        "autor": "Sebastián Carreño Villanueva 🧱"
+    })
+
 
 def obtener_pokemon(nombre):
     """Obtiene datos desde la PokéAPI"""
