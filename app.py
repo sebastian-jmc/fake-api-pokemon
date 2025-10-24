@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-import requests
+import requests, os
 
 app = Flask(__name__)
 CORS(app)
@@ -93,7 +93,7 @@ def delete(alumno, nombre):
     return jsonify({"mensaje": f"{nombre} eliminado del perfil {alumno}"})
 
 
-# 🧹 Borrar todos los datos de un alumno (opcional)
+# 🧹 Reset alumno
 @app.route('/<string:alumno>/reset', methods=['DELETE'])
 def reset(alumno):
     datos_alumnos[alumno] = []
@@ -115,8 +115,7 @@ def home_alumno(alumno):
     })
 
 
-# 🚀 Ejecutar app (Cloud Run compatible)
-import os
+# 🚀 Ejecutar app (Cloud Run y Docker compatible)
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8080))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port, debug=True)
