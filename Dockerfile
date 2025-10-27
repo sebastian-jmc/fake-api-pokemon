@@ -1,22 +1,23 @@
-# Usa una imagen base oficial de Python.
-# python:3.10-slim es una versión ligera y segura.
-FROM python:3.10-slim
+# Use la imagen base oficial de Python
+FROM python:3.8-slim
 
-# Establece el directorio de trabajo dentro del contenedor.
+# Establecer el directorio de trabajo en /app
 WORKDIR /app
 
-# Copia el archivo de dependencias primero para aprovechar el cache de Docker.
-COPY requirements.txt requirements.txt
+# Copiar el archivo requirements.txt al contenedor
+COPY requirements.txt .
 
-# Instala las dependencias.
-# --no-cache-dir reduce el tamaño final de la imagen.
+# Instalar las dependencias
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia el resto del código de tu aplicación al contenedor.
+# Copiar el código de la aplicación al contenedor
 COPY . .
-# Exponer el puerto (Cloud Run usa 8080)
+
+# Exponer el puerto 8080, que es el puerto predeterminado que Cloud Run utiliza para HTTP
 EXPOSE 8080
 
-# Comando para ejecutar la aplicación usando un servidor de producción (Gunicorn).
-# Escuchará en el puerto que Google Cloud le asigne a través de la variable de entorno $PORT.
-CMD exec gunicorn --bind 0.0.0.0:${PORT:-8080} --workers 1 --threads 8 --timeout 0 app:app
+# Definir la variable de entorno para Flask
+ENV FLASK_APP=app.py
+
+# Ejecutar el servidor Gunicorn cuando se inicie el contenedor
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "app:app"]
