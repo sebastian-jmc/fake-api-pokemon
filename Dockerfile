@@ -19,4 +19,4 @@ EXPOSE 8080
 
 # Comando para ejecutar la aplicación usando un servidor de producción (Gunicorn).
 # Escuchará en el puerto que Google Cloud le asigne a través de la variable de entorno $PORT.
-CMD ["gunicorn", "--bind", "0.0.0.0:$PORT", "app:app"]
+CMD exec gunicorn --bind 0.0.0.0:$PORT --workers 1 --threads 8 --timeout 0 app:app
